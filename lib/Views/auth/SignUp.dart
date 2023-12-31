@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simpleglacces/Controller/HomeController.dart';
 
 
 class SignUpPage extends StatefulWidget {
@@ -37,20 +40,33 @@ class _SignUpPageState extends State<SignUpPage> {
             children: [
             Container(
               alignment: Alignment.topCenter,
-              child:   Stack(
-                  children:[
-                    CircleAvatar(
-                      radius: 64,
-                      backgroundImage: AssetImage("Asset/images/pic3.png"),
-                    ),
-                    Positioned(child:
-                    IconButton(onPressed: (){},
-                      icon: const Icon(Icons.add_a_photo),
-                    ),
-                      bottom: -10,
-                      left: 80,
-                    )
-                  ]
+              child:   GetBuilder<ImagePickerController>(
+                init: Get.put(ImagePickerController()),
+                builder: (value){
+                  return Stack(
+                      children:[
+                        value.selectedImagePath== ""?CircleAvatar(
+                          radius: 64,
+                          backgroundImage: AssetImage("Asset/images/pic3.png"),
+                        ):
+                        Image.file(
+                          File(value.selectedImagePath),
+                          height: 200,
+                          width: 200,
+                          fit: BoxFit.fill,
+                        ),
+                        Positioned(child:
+                        IconButton(onPressed: (){
+                          value.gallerySelect(context);
+                        },
+                          icon:  Icon(Icons.add_a_photo),
+                        ),
+                          bottom: -10,
+                          left: 80,
+                        )
+                      ]
+                  );
+                },
               ),
             ),
               SizedBox(height: 10,),
